@@ -5,17 +5,25 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        style="@style/padding_layout_match"
+        style="@style/layout_match"
         android:orientation="vertical">
-
-        <TextView
-            style="@style/layout_wrap"
-            android:text="@string/hello_world" />
 
         <com.gc.materialdesign.views.ButtonFlat
             android:id="@+id/button_flat"
             style="@style/button_flat"
             android:text="女人" />
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:id="@+id/button"
+            style="@style/button_rectangle"
+            android:text="Button" />
+
+        <com.gc.materialdesign.views.CheckBox
+            android:id="@+id/checkBox"
+            style="@style/layout_wrap"
+            android:background="@color/button_ok"
+            materialdesign:check="true" />
+
     </LinearLayout>
 
 </com.gc.materialdesign.views.ScrollView>
