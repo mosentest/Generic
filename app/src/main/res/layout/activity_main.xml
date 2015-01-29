@@ -1,0 +1,21 @@
+<com.gc.materialdesign.views.ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/padding_layout_match"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        style="@style/padding_layout_match"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/layout_wrap"
+            android:text="@string/hello_world" />
+
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/button_flat"
+            style="@style/button_flat"
+            android:text="女人" />
+    </LinearLayout>
+
+</com.gc.materialdesign.views.ScrollView>
