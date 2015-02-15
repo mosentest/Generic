@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.moziqi.generic.R;
 
@@ -46,18 +50,60 @@ public class LoadingActivity extends ActionBarActivity implements View.OnClickLi
     }
 
     @Override
+    public Intent getSupportParentActivityIntent() {
+        return super.getSupportParentActivityIntent();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_loading, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setIconifiedByDefault(true);
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setQueryHint("请输入查询信息");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Toast.makeText(LoadingActivity.this, s + "提交", Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (!TextUtils.isEmpty(s)) {
+                    Toast.makeText(LoadingActivity.this, s, Toast.LENGTH_LONG).show();
+                }
+                return false;
+            }
+        });
+
+        //TODO 兼容低版本的 Handling collapsible action views
+        MenuItem compose = menu.findItem(R.id.action_compose);
+        MenuItemCompat.setOnActionExpandListener(compose, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // Do something when collapsed
+                return true;  // Return true to collapse action view
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                // Do something when expanded
+                return true;  // Return true to expand action view
+            }
+        });
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
+        switch (id) {
+            case R.id.action_search:
+        }
         return super.onOptionsItemSelected(item);
     }
 
