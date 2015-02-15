@@ -2,5 +2,6 @@
 <resources>
 
     <color name="button_ok">#1E88E5</color>
-
+    <color name="white">#FFFFFF</color>
+    <color name="green">#0aa770</color>
 </resources>

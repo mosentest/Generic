@@ -4,5 +4,8 @@
     <string name="app_name">Generic</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_loading">New Android</string>
+    <string name="action_search">查询</string>
+    <string name="action_compose">打开</string>
 
 </resources>
