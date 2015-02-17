@@ -7,5 +7,9 @@
     <string name="title_activity_loading">New Android</string>
     <string name="action_search">查询</string>
     <string name="action_compose">打开</string>
+    <string name="share">分享</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="artist">文章</string>
+    <string name="album">相册</string>
 
 </resources>

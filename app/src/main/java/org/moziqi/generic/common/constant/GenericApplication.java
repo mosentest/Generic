@@ -1,7 +1,10 @@
 package org.moziqi.generic.common.constant;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -40,16 +43,60 @@ public class GenericApplication extends Application {
         super.onConfigurationChanged(newConfig);
     }
 
-    private void showToast(String msg) {
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+    /**
+     * 打印土司
+     *
+     * @param msg
+     */
+    public static void showToast(String msg) {
+        Toast.makeText(instance, msg, Toast.LENGTH_LONG).show();
     }
 
-    private void showLog(String msg) {
+    /**
+     * 打印日志
+     *
+     * @param msg
+     */
+    public static void showLog(String msg) {
         showLog(TAG, msg);
     }
 
-    private void showLog(String tag, String msg) {
+    public static void showLog(String tag, String msg) {
         Log.e(tag, msg);
     }
 
+    /**
+     * 获取局部广播器
+     *
+     * @return
+     */
+    public static LocalBroadcastManager getLocalBroadcastManager() {
+        LocalBroadcastManager instance1 = LocalBroadcastManager.getInstance(instance);
+        return instance1;
+    }
+
+    public SharedPreferences sharePreference(String name, int mode) {
+        SharedPreferences sharedPreferences = getSharedPreferences(name, mode);
+        return sharedPreferences;
+    }
+
+    private SharedPreferences.Editor userEditor() {
+        SharedPreferences user = sharePreference("user", MODE_PRIVATE);
+        SharedPreferences.Editor edit = user.edit();
+        return edit;
+    }
+
+    public void saveNewUserInfo(String username, String password) {
+        SharedPreferences.Editor edit = userEditor();
+        edit.putString("username", username);
+        edit.putString("password", password);
+        edit.commit();
+    }
+
+    public void deleteCurrentUserInfo() {
+        SharedPreferences.Editor edit = userEditor();
+        edit.remove("username");
+        edit.remove("password");
+        edit.commit();
+    }
 }
