@@ -1,8 +1,11 @@
 package org.moziqi.generic.company.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +19,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import org.moziqi.generic.R;
@@ -23,6 +28,8 @@ import org.moziqi.generic.company.fragment.AlbumFragment;
 import org.moziqi.generic.company.fragment.ArtistFragment;
 
 public class LoadingActivity extends ActionBarActivity implements View.OnClickListener {
+
+    final String CATEGORIES[] = {"热门报道", "政治", "经济", "Technology"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +48,15 @@ public class LoadingActivity extends ActionBarActivity implements View.OnClickLi
         //TODO 兼容旧版本 actionbar
         ActionBar supportActionBar = getSupportActionBar();
         setActionBar(supportActionBar);
+
     }
 
     private void setActionBar(ActionBar actionBar) {
+
         actionBar.setDisplayShowHomeEnabled(true);
         //不显示文字
         //actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setSubtitle("\"陈赫\"");
+        actionBar.setSubtitle("\"mo\"");
 
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -61,6 +70,19 @@ public class LoadingActivity extends ActionBarActivity implements View.OnClickLi
                 .setTabListener(new TabListener<AlbumFragment>(
                         this, "album", AlbumFragment.class));
         actionBar.addTab(tab);
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocationManager locationManager =
+                (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!gpsEnabled) {
+            Toast.makeText(LoadingActivity.this, "请打开GPS", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -71,6 +93,12 @@ public class LoadingActivity extends ActionBarActivity implements View.OnClickLi
     @Override
     public Intent getSupportParentActivityIntent() {
         return super.getSupportParentActivityIntent();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -198,6 +226,7 @@ public class LoadingActivity extends ActionBarActivity implements View.OnClickLi
             // User selected the already selected tab. Usually do nothing.
         }
     }
+
     private int getCurrentBattery(final Intent intent) {
         int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);

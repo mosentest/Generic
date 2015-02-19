@@ -4,19 +4,11 @@
     android:layout_height="match_parent"
     tools:context="org.moziqi.generic.company.fragment.AlbumFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-    <RadioButton
-        android:id="@+id/radioButton"
+    <Button
+        android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"
-        android:text="New RadioButton"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
+        android:text="相册" />
 </RelativeLayout>
