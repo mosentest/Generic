@@ -3,6 +3,7 @@ package org.moziqi.generic.company.util;
 import android.content.Context;
 import android.support.v4.view.ActionProvider;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageButton;
@@ -25,16 +26,17 @@ public class MyActionProvider extends ActionProvider {
     public View onCreateActionView() {
 
         // Inflate the action view to be shown on the action bar.
-        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        View view = layoutInflater.inflate(R.layout.action_provider_my, null);
-        ImageButton button = (ImageButton) view.findViewById(R.id.img_btn_one);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "点击1", Toast.LENGTH_LONG).show();
-            }
-        });
-        return view;
+//        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+//        View view = layoutInflater.inflate(R.layout.action_provider_my, null);
+//        ImageButton button = (ImageButton) view.findViewById(R.id.img_btn_one);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(mContext, "点击1", Toast.LENGTH_LONG).show();
+//            }
+//        });
+//        return view;
+        return null;
     }
 
     @Override
@@ -44,7 +46,27 @@ public class MyActionProvider extends ActionProvider {
 
     @Override
     public void onPrepareSubMenu(SubMenu subMenu) {
-        super.onPrepareSubMenu(subMenu);
+        subMenu.clear();
+        subMenu.add("android").setIcon(R.drawable.ic_launcher)
+                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(mContext, "点击1", Toast.LENGTH_LONG).show();
+                        return true;
+                    }
+                });
+        subMenu.add("material design").setIcon(R.drawable.ic_launcher)
+                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        return false;
+                    }
+                });
+    }
+
+    @Override
+    public boolean hasSubMenu() {
+        return true;
     }
 
 }

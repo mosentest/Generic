@@ -4,13 +4,6 @@
     tools:context="org.moziqi.generic.company.activity.LoadingActivity">
 
     <item
-        android:id="@+id/action_compose"
-        android:icon="@drawable/ic_action_compose"
-        android:title="@string/action_compose"
-        app:actionProviderClass="org.moziqi.generic.company.util.MyActionProvider"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/action_share"
         android:title="@string/share"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
@@ -24,4 +17,10 @@
         app:showAsAction="ifRoom|collapseActionView" />
     <!--TOdo 兼容低版本的search-->
 
+    <item
+        android:id="@+id/action_compose"
+        android:icon="@drawable/ic_action_overflow"
+        android:title="@string/action_compose"
+        app:actionProviderClass="org.moziqi.generic.company.util.MyActionProvider"
+        app:showAsAction="ifRoom" />
 </menu>
