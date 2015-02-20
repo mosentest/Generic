@@ -8,12 +8,14 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!--"gps" location provider-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
         android:name=".common.constant.GenericApplication"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:logo="@drawable/ic_launcher"
-        android:theme="@style/CustomActionBarTheme">
+        android:theme="@style/CustomActionBarTheme"
+        android:configChanges="orientation|keyboardHidden|screenSize">
         <!--TODO 兼容旧版本，显示-Using split action bar-->
         <meta-data
             android:name="android.support.UI_OPTIONS"
@@ -32,7 +34,8 @@
         <activity
             android:name=".company.activity.LoadingActivity"
             android:label="@string/title_activity_loading"
-            android:parentActivityName="org.moziqi.generic.company.activity.MainActivity">
+            android:parentActivityName="org.moziqi.generic.company.activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

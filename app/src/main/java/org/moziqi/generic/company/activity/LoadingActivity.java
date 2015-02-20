@@ -3,6 +3,7 @@ package org.moziqi.generic.company.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.os.BatteryManager;
 import android.os.Build;
@@ -36,19 +37,20 @@ public class LoadingActivity extends ActionBarActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         //静态
-//        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-//        final Intent batteryIntent = this.registerReceiver(null, filter);
-//        int currentBattery = getCurrentBattery(batteryIntent);
-//        boolean charging = isCharging(batteryIntent);
-//        Toast.makeText(LoadingActivity.this, currentBattery + "-" + charging, Toast.LENGTH_LONG).show();
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        final Intent batteryIntent = this.registerReceiver(null, filter);
+        int currentBattery = getCurrentBattery(batteryIntent);
+        boolean charging = isCharging(batteryIntent);
+        Toast.makeText(LoadingActivity.this, "当前电量：" + currentBattery + "-是否在充电：" + charging, Toast.LENGTH_LONG).show();
+
         //动态注册
-        Intent intent = new Intent();
-        intent.setAction("android.intent.action.MY_POWER");
-        sendBroadcast(intent);
+//        Intent intent = new Intent();
+//        intent.setAction("android.intent.action.MY_POWER");
+//        sendBroadcast(intent);
+
         //TODO 兼容旧版本 actionbar
         ActionBar supportActionBar = getSupportActionBar();
         setActionBar(supportActionBar);
-
     }
 
     private void setActionBar(ActionBar actionBar) {

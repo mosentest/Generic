@@ -1,6 +1,7 @@
 package org.moziqi.generic.common.constant;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
@@ -81,7 +82,7 @@ public class GenericApplication extends Application {
     }
 
     private SharedPreferences.Editor userEditor() {
-        SharedPreferences user = sharePreference("user", MODE_PRIVATE);
+        SharedPreferences user = sharePreference("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = user.edit();
         return edit;
     }
