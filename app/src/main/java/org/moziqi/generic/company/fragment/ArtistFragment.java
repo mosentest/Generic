@@ -130,6 +130,13 @@ public class ArtistFragment extends Fragment {
         treeViewAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        lv_tree = null;
+        treeViewAdapter = null;
+        mRootList = null;
+    }
 
     public View findViewById(int paramInt) {
         return getView().findViewById(paramInt);

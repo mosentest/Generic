@@ -28,7 +28,7 @@ import org.moziqi.generic.R;
 import org.moziqi.generic.company.fragment.AlbumFragment;
 import org.moziqi.generic.company.fragment.ArtistFragment;
 
-public class LoadingActivity extends ActionBarActivity implements View.OnClickListener {
+public class LoadingActivity extends ActionBarActivity implements View.OnClickListener ,AlbumFragment.OnHeadlineSelectedListener {
 
     final String CATEGORIES[] = {"热门报道", "政治", "经济", "Technology"};
 
@@ -55,7 +55,7 @@ public class LoadingActivity extends ActionBarActivity implements View.OnClickLi
 
     private void setActionBar(ActionBar actionBar) {
 
-        actionBar.setDisplayShowHomeEnabled(true);
+//        actionBar.setDisplayShowHomeEnabled(true);
         //不显示文字
         //actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setSubtitle("\"mo\"");
@@ -147,9 +147,9 @@ public class LoadingActivity extends ActionBarActivity implements View.OnClickLi
             }
         });
 
-        MenuItem shareItem = menu.findItem(R.id.action_share);
-        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
-        mShareActionProvider.setShareIntent(getDefaultIntent());
+//        MenuItem shareItem = menu.findItem(R.id.action_share);
+//        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+//        mShareActionProvider.setShareIntent(getDefaultIntent());
         return true;
     }
 
@@ -180,6 +180,11 @@ public class LoadingActivity extends ActionBarActivity implements View.OnClickLi
         switch (v.getId()) {
 
         }
+    }
+
+    @Override
+    public void onArticleSelected(int position) {
+
     }
 
     private static class TabListener<T extends Fragment> implements ActionBar.TabListener {
