@@ -1,15 +1,13 @@
 package org.moziqi.generic.common.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import org.moziqi.generic.R;
 
 /**
  * Created by moziqi on 2015/1/29 0029.
@@ -27,6 +25,11 @@ public class GenericFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override

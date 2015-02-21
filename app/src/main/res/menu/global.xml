@@ -1,14 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.moziqi.generic.company.activity.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
     <item
-        android:id="@+id/action_example"
-        android:title="@string/action_example"
-        android:icon="@drawable/ic_action_notify"
-        app:showAsAction="always"/>
-    <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_settings1"
         android:orderInCategory="100"
         android:title="@string/logout"
         app:showAsAction="never"/>
@@ -22,4 +16,5 @@
         android:orderInCategory="100"
         android:title="@string/switch_theme"
         app:showAsAction="never"/>
+
 </menu>

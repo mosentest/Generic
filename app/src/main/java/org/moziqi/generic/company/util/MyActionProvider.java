@@ -1,6 +1,7 @@
 package org.moziqi.generic.company.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.ActionProvider;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import org.moziqi.generic.R;
+import org.moziqi.generic.company.activity.MainActivity;
 
 /**
  * Created by moziqi on 2015/2/19 0019.
@@ -47,11 +49,12 @@ public class MyActionProvider extends ActionProvider {
     @Override
     public void onPrepareSubMenu(SubMenu subMenu) {
         subMenu.clear();
-        subMenu.add("android").setIcon(R.drawable.ic_launcher)
+        subMenu.add("跳转Draw").setIcon(R.drawable.ic_launcher)
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(mContext, "点击1", Toast.LENGTH_LONG).show();
+                        Intent mIntent = new Intent(mContext, MainActivity.class);
+                        mContext.startActivity(mIntent);
                         return true;
                     }
                 });
