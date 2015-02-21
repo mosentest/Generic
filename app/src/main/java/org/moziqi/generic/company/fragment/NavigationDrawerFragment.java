@@ -1,6 +1,7 @@
 package org.moziqi.generic.company.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -22,11 +23,13 @@ import android.widget.Toast;
 
 import org.moziqi.generic.R;
 import org.moziqi.generic.common.fragment.GenericFragment;
+import org.moziqi.generic.company.activity.LoadingActivity;
 import org.moziqi.generic.company.adapter.DrawerListAdapter;
 import org.moziqi.generic.company.entity.DrawerListItem;
 
 import java.util.ArrayList;
 import java.util.List;
+
 public class NavigationDrawerFragment extends GenericFragment {
     /**
      * 存放选中item的位置
@@ -76,6 +79,13 @@ public class NavigationDrawerFragment extends GenericFragment {
                              Bundle savedInstanceState) {
         mDrawerListView = (ListView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         View headerView = inflater.inflate(R.layout.drawer_list_header, null);
+        headerView.findViewById(R.id.ll_drawer_header).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LoadingActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
         mDrawerListView.addHeaderView(headerView);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -193,7 +203,7 @@ public class NavigationDrawerFragment extends GenericFragment {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
-            if(mCurrentSelectedPosition == 0) {
+            if (mCurrentSelectedPosition == 0) {
                 mCallbacks.onNavigationDrawerItemSelected(getString(R.string.app_name));
                 return;
             }
@@ -247,7 +257,8 @@ public class NavigationDrawerFragment extends GenericFragment {
         }
 
         if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), LoadingActivity.class);
+            getActivity().startActivity(intent);
             return true;
         }
 

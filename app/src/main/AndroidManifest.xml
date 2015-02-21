@@ -28,23 +28,22 @@
         <activity
             android:name=".company.activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:parentActivityName="org.moziqi.generic.company.activity.LoadingActivity">
-
-            <!-- http://blog.csdn.net/guolin_blog/article/details/18234477 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.moziqi.generic.company.activity.LoadingActivity" />
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity
             android:name=".company.activity.LoadingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_loading">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="@string/title_activity_loading"
+            android:parentActivityName="org.moziqi.generic.company.activity.MainActivity">
+            <!-- http://blog.csdn.net/guolin_blog/article/details/18234477 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.moziqi.generic.company.activity.MainActivity" />
         </activity>
 
         <receiver android:name=".company.BroadcastReceiver.PowerConnectionReceiver">

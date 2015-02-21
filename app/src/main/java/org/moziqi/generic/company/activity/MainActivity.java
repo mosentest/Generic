@@ -15,11 +15,22 @@ import android.widget.TextView;
 
 import org.moziqi.generic.R;
 import org.moziqi.generic.common.activity.GenericActivity;
+import org.moziqi.generic.company.fragment.CollectFragment;
+import org.moziqi.generic.company.fragment.DraftFragment;
+import org.moziqi.generic.company.fragment.ExploreFragment;
+import org.moziqi.generic.company.fragment.FollowFragment;
+import org.moziqi.generic.company.fragment.HomeFragment;
+import org.moziqi.generic.company.fragment.LoginFragment;
 import org.moziqi.generic.company.fragment.NavigationDrawerFragment;
+import org.moziqi.generic.company.fragment.QuestionFragment;
+import org.moziqi.generic.company.fragment.SearchFragment;
+import org.moziqi.generic.company.fragment.SettingFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class MainActivity extends GenericActivity implements
-        NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends GenericActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     /**
      * 左侧划出抽屉内部fragment
      */
@@ -30,17 +41,15 @@ public class MainActivity extends GenericActivity implements
     private CharSequence mTitle;
 
     private Fragment currentFragment;
+
     private Fragment lastFragment;
+
+    private List<Fragment> fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-        // 设置抽屉
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
     @Override
@@ -64,7 +73,19 @@ public class MainActivity extends GenericActivity implements
 
     @Override
     protected void initUI() {
-
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
+        // 设置抽屉
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        fragments = new ArrayList<Fragment>();
+        fragments.add(HomeFragment.newInstance("首页"));
+        fragments.add(ExploreFragment.newInstance("发现"));
+        fragments.add(FollowFragment.newInstance("关注"));
+        fragments.add(CollectFragment.newInstance("收藏"));
+        fragments.add(DraftFragment.newInstance("草稿"));
+        fragments.add(SearchFragment.newInstance("搜索"));
+        fragments.add(QuestionFragment.newInstance("提问"));
+        fragments.add(SettingFragment.newInstance("设置"));
     }
 
     @Override
@@ -74,23 +95,28 @@ public class MainActivity extends GenericActivity implements
 
     @Override
     public void onNavigationDrawerItemSelected(String title) {
+        String[] itemTitle = getResources().getStringArray(R.array.item_title);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         currentFragment = fragmentManager.findFragmentByTag(title);
-        if (currentFragment == null) {
-            currentFragment = ContentFragment.newInstance(title);
-            ft.add(R.id.container, currentFragment, title);
+        for (int i = 0; i < itemTitle.length; i++) {
+            if (itemTitle[i].equals(title)) {
+                if (currentFragment == null) {
+                    currentFragment = fragments.get(i);
+                    ft.add(R.id.container, currentFragment, title);
+                }
+                if (lastFragment != null) {
+                    ft.hide(lastFragment);
+                }
+                if (currentFragment.isDetached()) {
+                    ft.attach(currentFragment);
+                }
+                ft.show(currentFragment);
+                lastFragment = currentFragment;
+                ft.commit();
+                onSectionAttached(title);
+            }
         }
-        if (lastFragment != null) {
-            ft.hide(lastFragment);
-        }
-        if (currentFragment.isDetached()) {
-            ft.attach(currentFragment);
-        }
-        ft.show(currentFragment);
-        lastFragment = currentFragment;
-        ft.commit();
-        onSectionAttached(title);
     }
 
     public void onSectionAttached(String title) {

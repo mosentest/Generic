@@ -53,8 +53,8 @@ public class MyActionProvider extends ActionProvider {
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        Intent mIntent = new Intent(mContext, MainActivity.class);
-                        mContext.startActivity(mIntent);
+//                        Intent mIntent = new Intent(mContext, MainActivity.class);
+//                        mContext.startActivity(mIntent);
                         return true;
                     }
                 });

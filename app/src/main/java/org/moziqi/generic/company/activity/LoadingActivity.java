@@ -55,7 +55,7 @@ public class LoadingActivity extends ActionBarActivity implements View.OnClickLi
 
     private void setActionBar(ActionBar actionBar) {
 
-//        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
         //不显示文字
         //actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setSubtitle("\"mo\"");
