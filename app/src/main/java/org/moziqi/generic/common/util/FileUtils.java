@@ -2,6 +2,9 @@ package org.moziqi.generic.common.util;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Environment;
+import android.os.StatFs;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -112,6 +115,104 @@ public final class FileUtils {
         return file;
     }
 
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    public File getAlbumStorageDir(String albumName) throws Exception {
+        // Get the directory for the user's public pictures directory.
+        if (!isExternalStorageWritable()) {
+            throw new RuntimeException("不够权限操作SD卡");
+        }
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), albumName);
+        if (!file.mkdirs()) {
+            log("Directory not created");
+        }
+        return file;
+    }
+
+    public File getAlbumStoragePrivateDir(String albumName) throws Exception {
+        // Get the directory for the app's private pictures directory.
+        if (!isExternalStorageWritable()) {
+            throw new RuntimeException("不够权限操作SD卡");
+        }
+        File file = new File(mContext.getExternalFilesDir(
+                Environment.DIRECTORY_PICTURES), albumName);
+        if (!file.mkdirs()) {
+            log("Directory not created");
+        }
+        return file;
+    }
+
+    /**
+     * 获得sd卡剩余容量，即可用大小
+     *
+     * @return
+     */
+    public String getExternalStorageDirectoryFreeSpace() {
+        File path = Environment.getExternalStorageDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getAvailableBlocks();
+        return Formatter.formatFileSize(mContext, blockSize * availableBlocks);
+    }
+
+    /**
+     * 获得SD卡总大小
+     *
+     * @return
+     */
+    public String getExternalStorageDirectoryTotalSpace() {
+        File externalStorageDirectory = Environment.getExternalStorageDirectory();
+        StatFs stat = new StatFs(externalStorageDirectory.getPath());
+        long blockSize = stat.getBlockSize();
+        long totalBlocks = stat.getBlockCount();
+        return Formatter.formatFileSize(mContext, blockSize * totalBlocks);
+    }
+
+    /**
+     * 获得机身内存总大小 
+     *
+     * @return
+     */
+    private String getRomTotalSize() {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long totalBlocks = stat.getBlockCount();
+        return Formatter.formatFileSize(mContext, blockSize * totalBlocks);
+    }
+
+    /**
+     * 获得机身可用内存 
+     *
+     * @return
+     */
+    private String getRomAvailableSize() {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getAvailableBlocks();
+        return Formatter.formatFileSize(mContext, blockSize * availableBlocks);
+    }
+    
     public void log(String msg) {
         Log.i("FileUtils", msg);
     }

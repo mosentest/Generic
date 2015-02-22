@@ -18,6 +18,8 @@ import com.gc.materialdesign.views.Button;
 import org.moziqi.generic.R;
 import org.moziqi.generic.common.util.FileUtils;
 
+import java.io.File;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -53,15 +55,24 @@ public class AlbumFragment extends Fragment {
                 String fileName = "moziqi";
                 String msg = mEditText.getText().toString();
                 FileUtils fileUtils = new FileUtils(getActivity());
-                try {
-                    fileUtils.writeByOpenFileOutput(fileName, msg);
-                } catch (Exception e) {
-                    String error = "已存在" + fileName;
-                    toast(error);
-                    e.printStackTrace();
-                }
-                String content = fileUtils.readByOpenFileInput(fileName);
-                mTextView.setText(content);
+//                try {
+//                    fileUtils.writeByOpenFileOutput(fileName, msg);
+//                } catch (Exception e) {
+//                    String error = "已存在" + fileName;
+//                    toast(error);
+//                    e.printStackTrace();
+//                }
+//                String content = fileUtils.readByOpenFileInput(fileName);
+//                mTextView.setText(content);
+
+//                try {
+//                    File mo = fileUtils.getAlbumStoragePrivateDir("mo");
+//                } catch (Exception e) {
+//                    toast("没有内存卡");
+//                    e.printStackTrace();
+//                }
+                String freeSpace = fileUtils.getExternalStorageDirectoryFreeSpace();
+                log(freeSpace+"");
             }
         });
     }
