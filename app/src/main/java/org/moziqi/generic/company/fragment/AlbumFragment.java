@@ -5,29 +5,34 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gc.materialdesign.views.Button;
 
 import org.moziqi.generic.R;
+import org.moziqi.generic.common.UI.listView.HorizontalListView;
 import org.moziqi.generic.common.util.FileUtils;
+import org.moziqi.generic.company.adapter.HorizontalListViewAdapter;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AlbumFragment extends Fragment {
-    private Button mButton;
-    private TextView mTextView;
-    private EditText mEditText;
-
+public class AlbumFragment extends ListFragment {
+    HorizontalListView hListView;
+    HorizontalListViewAdapter hListViewAdapter;
     OnHeadlineSelectedListener mCallback;
 
     // Container Activity must implement this interface
@@ -46,33 +51,18 @@ public class AlbumFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mButton = (Button) findViewById(R.id.button);
-        mTextView = (TextView) findViewById(R.id.textView);
-        mEditText = (EditText) findViewById(R.id.editText);
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String fileName = "moziqi";
-                String msg = mEditText.getText().toString();
-                FileUtils fileUtils = new FileUtils(getActivity());
-//                try {
-//                    fileUtils.writeByOpenFileOutput(fileName, msg);
-//                } catch (Exception e) {
-//                    String error = "已存在" + fileName;
-//                    toast(error);
-//                    e.printStackTrace();
-//                }
-//                String content = fileUtils.readByOpenFileInput(fileName);
-//                mTextView.setText(content);
+        hListView = (HorizontalListView) findViewById(R.id.horizon_listview);
+        final String[] titles = {"怀师", "南怀瑾军校", "闭关", "南怀瑾", "南公庄严照", "怀师法相","怀师", "南怀瑾军校", "闭关", "南怀瑾", "南公庄严照", "怀师法相","怀师", "南怀瑾军校", "闭关", "南怀瑾", "南公庄严照", "怀师法相"};
+        hListViewAdapter = new HorizontalListViewAdapter(getActivity(), titles);
+        hListView.setAdapter(hListViewAdapter);
+        hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-//                try {
-//                    File mo = fileUtils.getAlbumStoragePrivateDir("mo");
-//                } catch (Exception e) {
-//                    toast("没有内存卡");
-//                    e.printStackTrace();
-//                }
-                String freeSpace = fileUtils.getExternalStorageDirectoryFreeSpace();
-                log(freeSpace+"");
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                toast(titles[position]);
+                hListViewAdapter.setSelectIndex(position);
+                hListViewAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -93,9 +83,7 @@ public class AlbumFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mButton = null;
-        mTextView = null;
-        mEditText = null;
+
     }
 
     public View findViewById(int paramInt) {

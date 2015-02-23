@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.moziqi.generic.R;
 import org.moziqi.generic.common.fragment.GenericFragment;
@@ -78,7 +77,7 @@ public class NavigationDrawerFragment extends GenericFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mDrawerListView = (ListView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        View headerView = inflater.inflate(R.layout.drawer_list_header, null);
+        View headerView = inflater.inflate(R.layout.list_drawer_header, null);
         headerView.findViewById(R.id.ll_drawer_header).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
