@@ -10,10 +10,19 @@
         android:layout_height="30dp"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="10dp">
+
     </org.moziqi.generic.common.UI.listView.HorizontalListView>
 
+    <!--<com.gc.materialdesign.views.ButtonRectangle-->
+        <!--android:id="@+id/br_break"-->
+        <!--style="@style/button_rectangle"-->
+        <!--android:layout_below="@id/horizon_listview"-->
+        <!--android:text="返回">-->
+
+    <!--</com.gc.materialdesign.views.ButtonRectangle>-->
+
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/lv_file"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/horizon_listview" />

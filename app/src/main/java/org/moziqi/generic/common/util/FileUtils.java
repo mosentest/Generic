@@ -167,7 +167,7 @@ public final class FileUtils {
      * @return
      */
     public String getExternalStorageDirectoryFreeSpace() {
-        File path = Environment.getExternalStorageDirectory();
+        File path = getSDPath();
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
         long availableBlocks = stat.getAvailableBlocks();
@@ -180,7 +180,7 @@ public final class FileUtils {
      * @return
      */
     public String getExternalStorageDirectoryTotalSpace() {
-        File externalStorageDirectory = Environment.getExternalStorageDirectory();
+        File externalStorageDirectory = getSDPath();
         StatFs stat = new StatFs(externalStorageDirectory.getPath());
         long blockSize = stat.getBlockSize();
         long totalBlocks = stat.getBlockCount();
@@ -188,7 +188,17 @@ public final class FileUtils {
     }
 
     /**
-     * 获得机身内存总大小 
+     * 获取SD卡根路径
+     *
+     * @return
+     */
+    public static File getSDPath() {
+        File path = Environment.getExternalStorageDirectory();
+        return path;
+    }
+
+    /**
+     * 获得机身内存总大小
      *
      * @return
      */
@@ -201,7 +211,7 @@ public final class FileUtils {
     }
 
     /**
-     * 获得机身可用内存 
+     * 获得机身可用内存
      *
      * @return
      */
@@ -212,7 +222,7 @@ public final class FileUtils {
         long availableBlocks = stat.getAvailableBlocks();
         return Formatter.formatFileSize(mContext, blockSize * availableBlocks);
     }
-    
+
     public void log(String msg) {
         Log.i("FileUtils", msg);
     }

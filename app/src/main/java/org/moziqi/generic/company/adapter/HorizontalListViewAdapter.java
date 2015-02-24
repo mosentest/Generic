@@ -13,21 +13,23 @@ import android.widget.TextView;
 
 import org.moziqi.generic.R;
 
+import java.util.List;
+
 public class HorizontalListViewAdapter extends BaseAdapter {
-    private String[] mTitles;
+    private List<String> mStringLists;
     private Context mContext;
     private LayoutInflater mInflater;
     private int selectIndex = -1;
 
-    public HorizontalListViewAdapter(Context context, String[] titles) {
+    public HorizontalListViewAdapter(Context context,List<String> mStringLists) {
         this.mContext = context;
-        this.mTitles = titles;
+        this.mStringLists=mStringLists;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);//LayoutInflater.from(mContext);
     }
 
     @Override
     public int getCount() {
-        return mTitles.length;
+        return mStringLists.size();
     }
 
     @Override
@@ -58,7 +60,7 @@ public class HorizontalListViewAdapter extends BaseAdapter {
             convertView.setSelected(false);
         }
 
-        holder.mTitle.setText(mTitles[position]);
+        holder.mTitle.setText(mStringLists.get(position));
 
         return convertView;
     }

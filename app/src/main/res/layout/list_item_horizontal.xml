@@ -15,7 +15,9 @@
         android:id="@+id/text_list_item"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:textSize="18dp"
-        android:gravity="center" />
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleline="true"
+        android:textSize="18dp" />
 
 </LinearLayout>
