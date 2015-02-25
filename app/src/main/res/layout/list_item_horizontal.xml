@@ -17,7 +17,7 @@
         android:layout_height="30dp"
         android:ellipsize="end"
         android:gravity="center"
-        android:singleline="true"
+        android:singleLine="true"
         android:textSize="18dp" />
 
 </LinearLayout>

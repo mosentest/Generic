@@ -54,11 +54,11 @@ public class HorizontalListViewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (position == selectIndex) {
-            convertView.setSelected(true);
-        } else {
-            convertView.setSelected(false);
-        }
+//        if (position == selectIndex) {
+//            convertView.setSelected(true);
+//        } else {
+//            convertView.setSelected(false);
+//        }
 
         holder.mTitle.setText(mStringLists.get(position));
 

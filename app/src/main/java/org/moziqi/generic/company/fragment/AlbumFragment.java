@@ -2,6 +2,7 @@ package org.moziqi.generic.company.fragment;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -23,17 +25,23 @@ import com.gc.materialdesign.views.ButtonRectangle;
 import org.moziqi.generic.R;
 import org.moziqi.generic.common.UI.listView.HorizontalListView;
 import org.moziqi.generic.common.util.FileUtils;
+import org.moziqi.generic.common.util.OpenFiles;
 import org.moziqi.generic.company.adapter.FileListAdapter;
 import org.moziqi.generic.company.adapter.HorizontalListViewAdapter;
+import org.moziqi.generic.company.filter.HiddenFileFilter;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AlbumFragment extends Fragment {
+public class AlbumFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private ListView lv_file;
 
@@ -53,10 +61,18 @@ public class AlbumFragment extends Fragment {
     private List<String> titles;
     private StringBuffer stringBuffer;
 
-
     // Container Activity must implement this interface
     public interface OnHeadlineSelectedListener {
         public void onArticleSelected(int position);
+    }
+
+
+    private boolean checkEndsWithInStringArray(String checkItsEnd, String[] fileEndings) {
+        for (String aEnd : fileEndings) {
+            if (checkItsEnd.endsWith(aEnd))
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -67,44 +83,9 @@ public class AlbumFragment extends Fragment {
         titles = new ArrayList<>();
         titles.add(currentParent.getName());
         hListViewAdapter = new HorizontalListViewAdapter(getActivity(), titles);
-        currentFiles = currentParent.listFiles();
+        currentFiles = currentParent.listFiles(HiddenFileFilter.getInstance());
+        Arrays.sort(currentFiles);
         fileListAdapter = new FileListAdapter(getActivity(), currentFiles);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        log("onPause");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        log("onResume");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        log("onStop");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        log("onStart");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        log("onDestroyView");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        log("onDetach");
     }
 
     @Override
@@ -125,49 +106,31 @@ public class AlbumFragment extends Fragment {
         lv_file = (ListView) findViewById(R.id.lv_file);
         lv_file.setAdapter(fileListAdapter);
         //先初始化，后才能更新数据
-
-        hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        hListView.setOnItemClickListener(this);
+        lv_file.setOnItemClickListener(this);
+        //滚动的时候加载
+        lv_file.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //获取路径
-                stringBuffer = new StringBuffer();
-                stringBuffer.append("/storage/");
-                for (int i = 0; i < position; i++) {
-                    stringBuffer.append(titles.get(i));
-                    stringBuffer.append("/");
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                switch (scrollState) {
+                    case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
+                        fileListAdapter.setFlagBusy(true);
+                        break;
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        fileListAdapter.setFlagBusy(false);
+                        break;
+                    case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+                        fileListAdapter.setFlagBusy(false);
+                        break;
+                    default:
+                        break;
                 }
-                stringBuffer.append(titles.get(position));
-//                log(stringBuffer.toString());
-                currentParent = new File(stringBuffer.toString());
-                currentFiles = currentParent.listFiles();
-                //根据导航条更新下面的列表
-                fileListAdapter.updateData(currentFiles);
-                //更新导航条
-                for (int i = titles.size() - 1; i > position; i--) {
-                    titles.remove(i);
-                }
-                hListViewAdapter.setSelectIndex(position);
-                hListViewAdapter.notifyDataSetChanged();
-
+                fileListAdapter.notifyDataSetChanged();
             }
-        });
-        lv_file.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (currentFiles[position].isFile()) {
-                    return;
-                }
-                File[] files = currentFiles[position].listFiles();
-                if (files == null || files.length == 0) {
-                    toast("当前路径不可访问或者该路径下没有文件");
-                } else {
-                    // 获取用户单击的列表项对应的文件夹，设为当前的父文件夹
-                    currentParent = currentFiles[position];
-                    titles.add(currentParent.getName());
-                    hListViewAdapter.notifyDataSetChanged();
-                    currentFiles = files;
-                    fileListAdapter.updateData(currentFiles);
-                }
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
             }
         });
     }
@@ -193,6 +156,99 @@ public class AlbumFragment extends Fragment {
         hListViewAdapter = null;
         mCallback = null;
         stringBuffer = null;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch (parent.getId()) {
+            case R.id.horizon_listview:
+                //获取路径
+                stringBuffer = new StringBuffer();
+                stringBuffer.append("/storage/");
+                for (int i = 0; i < position; i++) {
+                    stringBuffer.append(titles.get(i));
+                    stringBuffer.append("/");
+                }
+                stringBuffer.append(titles.get(position));
+//                log(stringBuffer.toString());
+                currentParent = new File(stringBuffer.toString());
+                currentFiles = currentParent.listFiles(HiddenFileFilter.getInstance());
+                //根据导航条更新下面的列表
+                Arrays.sort(currentFiles);
+                fileListAdapter.updateData(currentFiles);
+                //更新导航条
+                for (int i = titles.size() - 1; i > position; i--) {
+                    titles.remove(i);
+                }
+                hListViewAdapter.setSelectIndex(position);
+                hListViewAdapter.notifyDataSetChanged();
+                break;
+            case R.id.lv_file:
+                if (currentFiles[position].isFile()) {
+                    String fileName = currentFiles[position].toString();
+                    Intent intent;
+                    if (checkEndsWithInStringArray(fileName, getResources().
+                            getStringArray(R.array.fileEndingImage))) {
+                        intent = OpenFiles.getImageFileIntent(currentFiles[position]);
+                        startActivity(intent);
+                    } else if (checkEndsWithInStringArray(fileName, getResources().
+                            getStringArray(R.array.fileEndingWebText))) {
+                        intent = OpenFiles.getHtmlFileIntent(currentFiles[position]);
+                        startActivity(intent);
+                    } else if (checkEndsWithInStringArray(fileName, getResources().
+                            getStringArray(R.array.fileEndingPackage))) {
+                        intent = OpenFiles.getApkFileIntent(currentFiles[position]);
+                        startActivity(intent);
+
+                    } else if (checkEndsWithInStringArray(fileName, getResources().
+                            getStringArray(R.array.fileEndingAudio))) {
+                        intent = OpenFiles.getAudioFileIntent(currentFiles[position]);
+                        startActivity(intent);
+                    } else if (checkEndsWithInStringArray(fileName, getResources().
+                            getStringArray(R.array.fileEndingVideo))) {
+                        intent = OpenFiles.getVideoFileIntent(currentFiles[position]);
+                        startActivity(intent);
+                    } else if (checkEndsWithInStringArray(fileName, getResources().
+                            getStringArray(R.array.fileEndingText))) {
+                        intent = OpenFiles.getTextFileIntent(currentFiles[position]);
+                        startActivity(intent);
+                    } else if (checkEndsWithInStringArray(fileName, getResources().
+                            getStringArray(R.array.fileEndingPdf))) {
+                        intent = OpenFiles.getPdfFileIntent(currentFiles[position]);
+                        startActivity(intent);
+                    } else if (checkEndsWithInStringArray(fileName, getResources().
+                            getStringArray(R.array.fileEndingWord))) {
+                        intent = OpenFiles.getWordFileIntent(currentFiles[position]);
+                        startActivity(intent);
+                    } else if (checkEndsWithInStringArray(fileName, getResources().
+                            getStringArray(R.array.fileEndingExcel))) {
+                        intent = OpenFiles.getExcelFileIntent(currentFiles[position]);
+                        startActivity(intent);
+                    } else if (checkEndsWithInStringArray(fileName, getResources().
+                            getStringArray(R.array.fileEndingPPT))) {
+                        intent = OpenFiles.getPPTFileIntent(currentFiles[position]);
+                        startActivity(intent);
+                    } else {
+                        toast("无法打开，请安装相应的软件！");
+                    }
+                } else if (currentFiles[position].isDirectory()) {
+                    File[] files = currentFiles[position].listFiles(HiddenFileFilter.getInstance());
+                    if (files == null) {
+                        toast("当前路径不可访问");
+                    } else {
+                        // 获取用户单击的列表项对应的文件夹，设为当前的父文件夹
+                        currentParent = currentFiles[position];
+                        titles.add(currentParent.getName());
+                        hListViewAdapter.notifyDataSetChanged();
+                        currentFiles = files;
+                        Arrays.sort(currentFiles);
+                        fileListAdapter.updateData(currentFiles);
+                    }
+                }
+                break;
+            default:
+                toast("操作错误");
+        }
     }
 
     public View findViewById(int paramInt) {

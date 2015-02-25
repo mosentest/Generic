@@ -30,8 +30,6 @@ import org.moziqi.generic.company.fragment.ArtistFragment;
 
 public class LoadingActivity extends ActionBarActivity implements View.OnClickListener ,AlbumFragment.OnHeadlineSelectedListener {
 
-    final String CATEGORIES[] = {"热门报道", "政治", "经济", "Technology"};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

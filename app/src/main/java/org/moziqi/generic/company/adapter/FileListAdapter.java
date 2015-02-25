@@ -2,6 +2,8 @@ package org.moziqi.generic.company.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -13,9 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.moziqi.generic.R;
+import org.moziqi.generic.common.cache.ImageLoader;
+import org.moziqi.generic.common.util.FileType;
+import org.moziqi.generic.company.filter.HiddenFileFilter;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +35,13 @@ public class FileListAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private File[] mCurrentFiles;
+    private boolean mBusy = false;
+
+    public void setFlagBusy(boolean busy) {
+        this.mBusy = busy;
+    }
+
+    private ImageLoader mImageLoader;
 
     static {
         FILE_TYPE_ICONS.put("folder", R.drawable.folder);
@@ -74,9 +88,14 @@ public class FileListAdapter extends BaseAdapter {
 
     public FileListAdapter(Context context, File[] currentFiles) {
         mContext = context;
-        mCurrentFiles = currentFiles;
+        this.mCurrentFiles = currentFiles;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mImageLoader = new ImageLoader(context);
+    }
 
+
+    public ImageLoader getImageLoader() {
+        return mImageLoader;
     }
 
     @Override
@@ -113,14 +132,38 @@ public class FileListAdapter extends BaseAdapter {
         }
         Drawable drawable = null;
         if (mCurrentFiles[position].isDirectory()) {
-//            File[] files = mCurrentFiles[position].listFiles();
-//            viewHolder.tv_count.setText(files == null || files.length == 0 ? "空文件夹" : files.length + "项");
+            File[] files = mCurrentFiles[position].listFiles(HiddenFileFilter.getInstance());
+            viewHolder.tv_count.setText(files == null || files.length == 0 ? "空文件夹" : files.length + "项");
             drawable = mContext.getResources().getDrawable(R.drawable.folder);
             viewHolder.iv_icon.setImageDrawable(drawable);
         } else if (mCurrentFiles[position].isFile()) {
-//            viewHolder.tv_count.setText("");
-            drawable = mContext.getResources().getDrawable(R.drawable.css);
-            viewHolder.iv_icon.setImageDrawable(drawable);
+            viewHolder.tv_count.setText("");
+            if (checkEndsWithInStringArray(mCurrentFiles[position].toString(), mContext.getResources().
+                    getStringArray(R.array.fileEndingImage))) {
+                //TODO 加载本地图片
+                Bitmap bm = BitmapFactory.decodeFile(mCurrentFiles[position].getPath());
+                if (!mBusy) {
+                    try {
+                        mImageLoader.DisplayImage(mCurrentFiles[position].toURL() + "", viewHolder.iv_icon, false);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        mImageLoader.DisplayImage(mCurrentFiles[position].toURL() + "", viewHolder.iv_icon, false);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                String fileType = FileType.getFileType(mCurrentFiles[position]);
+                if (FILE_TYPE_ICONS.containsKey(fileType)) {
+                    drawable = mContext.getResources().getDrawable(FILE_TYPE_ICONS.get(fileType));
+                } else {
+                    drawable = mContext.getResources().getDrawable(R.drawable.ic_launcher);
+                }
+                viewHolder.iv_icon.setImageDrawable(drawable);
+            }
         }
         viewHolder.tv_name.setText(mCurrentFiles[position].getName());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -141,5 +184,13 @@ public class FileListAdapter extends BaseAdapter {
     public void updateData(File[] updateFiles) {
         mCurrentFiles = updateFiles;
         notifyDataSetChanged();
+    }
+
+    private boolean checkEndsWithInStringArray(String checkItsEnd, String[] fileEndings) {
+        for (String aEnd : fileEndings) {
+            if (checkItsEnd.endsWith(aEnd))
+                return true;
+        }
+        return false;
     }
 }

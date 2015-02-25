@@ -8,8 +8,8 @@
     <string name="action_search">查询</string>
     <string name="action_compose">打开</string>
     <string name="share">分享</string>
-    <string name="artist">文章</string>
-    <string name="album">相册</string>
+    <string name="artist">进程管理APP</string>
+    <string name="album">文件管理APP</string>
     <string name="logout">登出</string>
     <string name="about">关于</string>
     <string name="switch_theme">切换主题</string>
