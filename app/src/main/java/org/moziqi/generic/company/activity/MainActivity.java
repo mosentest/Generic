@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.BaiduMapOptions;
+import com.baidu.mapapi.map.MapStatus;
+
 import org.moziqi.generic.R;
 import org.moziqi.generic.common.activity.GenericActivity;
 import org.moziqi.generic.company.fragment.CollectFragment;
@@ -20,7 +23,6 @@ import org.moziqi.generic.company.fragment.DraftFragment;
 import org.moziqi.generic.company.fragment.ExploreFragment;
 import org.moziqi.generic.company.fragment.FollowFragment;
 import org.moziqi.generic.company.fragment.HomeFragment;
-import org.moziqi.generic.company.fragment.LoginFragment;
 import org.moziqi.generic.company.fragment.NavigationDrawerFragment;
 import org.moziqi.generic.company.fragment.QuestionFragment;
 import org.moziqi.generic.company.fragment.SearchFragment;
@@ -79,7 +81,10 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
         fragments = new ArrayList<Fragment>();
         fragments.add(HomeFragment.newInstance("首页"));
-        fragments.add(ExploreFragment.newInstance("发现"));
+        MapStatus ms = new MapStatus.Builder().overlook(-20).zoom(15).build();
+        BaiduMapOptions bo = new BaiduMapOptions().mapStatus(ms)
+                .compassEnabled(false).zoomControlsEnabled(false);
+        fragments.add(ExploreFragment.newInstance("发现", bo));
         fragments.add(FollowFragment.newInstance("关注"));
         fragments.add(CollectFragment.newInstance("收藏"));
         fragments.add(DraftFragment.newInstance("草稿"));

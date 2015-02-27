@@ -9,6 +9,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.baidu.mapapi.SDKInitializer;
+
 /**
  * Created by moziqi on 2015/1/29 0029.
  */
@@ -25,6 +27,7 @@ public class GenericApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        SDKInitializer.initialize(this);
         instance = this;
     }
 

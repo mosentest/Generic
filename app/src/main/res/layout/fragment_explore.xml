@@ -1,12 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/padding_layout_match"
+    style="@style/layout_width_match"
     tools:context="org.moziqi.generic.company.fragment.ExploreFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="他叫发现" />
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/mv_map"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:clickable="true" />
 
-</FrameLayout>
+</RelativeLayout>
+

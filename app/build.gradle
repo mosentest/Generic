@@ -30,4 +30,7 @@ dependencies {
     compile 'com.github.manuelpeinado.fadingactionbar:fadingactionbar:3.1.2'
     compile 'com.google.android.gms:play-services:6.1.71'
     compile files('libs/KJFrameForAndroid_v2.134.jar')
+    compile files('libs/android_api_1.1_forsdk.jar')
+    compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/galaxy_mini.jar')
 }
