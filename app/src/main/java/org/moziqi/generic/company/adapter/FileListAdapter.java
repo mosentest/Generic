@@ -161,7 +161,7 @@ public class FileListAdapter extends BaseAdapter {
         Drawable drawable = null;
         if (mCurrentFiles != null) {
             // 给ImageView设置一个Tag，保证异步加载图片时不会乱序
-//            viewHolder.iv_icon.setTag(mCurrentFiles[position].getPath());
+            viewHolder.iv_icon.setTag(mCurrentFiles[position].getPath());
             String fileType = FileType.getFileType(mCurrentFiles[position]);
             if (mCurrentFiles[position].isDirectory()) {
                 File[] files = mCurrentFiles[position].listFiles(HiddenFileFilter.getInstance());
