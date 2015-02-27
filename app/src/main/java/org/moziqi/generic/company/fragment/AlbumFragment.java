@@ -24,6 +24,7 @@ import com.gc.materialdesign.views.ButtonRectangle;
 
 import org.moziqi.generic.R;
 import org.moziqi.generic.common.UI.listView.HorizontalListView;
+import org.moziqi.generic.common.cache.ImageLoader;
 import org.moziqi.generic.common.util.FileUtils;
 import org.moziqi.generic.common.util.OpenFiles;
 import org.moziqi.generic.company.adapter.FileListAdapter;
@@ -84,7 +85,9 @@ public class AlbumFragment extends Fragment implements AdapterView.OnItemClickLi
         titles.add(currentParent.getName());
         hListViewAdapter = new HorizontalListViewAdapter(getActivity(), titles);
         currentFiles = currentParent.listFiles(HiddenFileFilter.getInstance());
-        Arrays.sort(currentFiles);
+        if (currentFiles != null) {
+            Arrays.sort(currentFiles);
+        }
         fileListAdapter = new FileListAdapter(getActivity(), currentFiles);
     }
 
@@ -156,6 +159,10 @@ public class AlbumFragment extends Fragment implements AdapterView.OnItemClickLi
         hListViewAdapter = null;
         mCallback = null;
         stringBuffer = null;
+        ImageLoader imageLoader = fileListAdapter.getImageLoader();
+        if (imageLoader != null){
+            imageLoader.clearCache();
+        }
     }
 
     @Override
@@ -174,7 +181,9 @@ public class AlbumFragment extends Fragment implements AdapterView.OnItemClickLi
                 currentParent = new File(stringBuffer.toString());
                 currentFiles = currentParent.listFiles(HiddenFileFilter.getInstance());
                 //根据导航条更新下面的列表
-                Arrays.sort(currentFiles);
+                if (currentFiles != null) {
+                    Arrays.sort(currentFiles);
+                }
                 fileListAdapter.updateData(currentFiles);
                 //更新导航条
                 for (int i = titles.size() - 1; i > position; i--) {
@@ -241,7 +250,9 @@ public class AlbumFragment extends Fragment implements AdapterView.OnItemClickLi
                         titles.add(currentParent.getName());
                         hListViewAdapter.notifyDataSetChanged();
                         currentFiles = files;
-                        Arrays.sort(currentFiles);
+                        if (currentFiles != null) {
+                            Arrays.sort(currentFiles);
+                        }
                         fileListAdapter.updateData(currentFiles);
                     }
                 }

@@ -10,8 +10,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.photoswalldemo.MainActivity;
+
 import org.moziqi.generic.R;
-import org.moziqi.generic.company.activity.MainActivity;
+//import org.moziqi.generic.company.activity.MainActivity;
 
 /**
  * Created by moziqi on 2015/2/19 0019.
@@ -53,8 +55,8 @@ public class MyActionProvider extends ActionProvider {
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-//                        Intent mIntent = new Intent(mContext, MainActivity.class);
-//                        mContext.startActivity(mIntent);
+                        Intent mIntent = new Intent(mContext, MainActivity.class);
+                        mContext.startActivity(mIntent);
                         return true;
                     }
                 });

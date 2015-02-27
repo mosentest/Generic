@@ -10,7 +10,7 @@
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="10dp"
-        android:src="@drawable/ic_launcher" />
+        android:scaleType="fitCenter"/>
 
     <TextView
         android:id="@+id/tv_name"
