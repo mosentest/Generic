@@ -19,6 +19,7 @@ public abstract class GenericActivity extends ActionBarActivity implements View.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showLog("onCreate");
     }
 
     @Override
@@ -29,6 +30,7 @@ public abstract class GenericActivity extends ActionBarActivity implements View.
     @Override
     protected void onStart() {
         super.onStart();
+        showLog("onStart");
     }
 
     @Override
@@ -39,21 +41,25 @@ public abstract class GenericActivity extends ActionBarActivity implements View.
     @Override
     protected void onResume() {
         super.onResume();
+        showLog("onResume");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        showLog("onPause");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        showLog("onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        showLog("onDestroy");
     }
 
     @Override
@@ -70,6 +76,7 @@ public abstract class GenericActivity extends ActionBarActivity implements View.
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         initUI();
+        showLog("setContentView");
     }
 
     @Override

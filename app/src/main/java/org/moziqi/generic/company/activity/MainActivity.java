@@ -1,5 +1,10 @@
 package org.moziqi.generic.company.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,8 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMapOptions;
 import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.SupportMapFragment;
+import com.baidu.mapapi.model.LatLng;
 
 import org.moziqi.generic.R;
 import org.moziqi.generic.common.activity.GenericActivity;
@@ -48,6 +60,17 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 
     private List<Fragment> fragments;
 
+    private static final String ARG_SECTION_TITLE = "section_title";
+
+    private SupportMapFragment supportMapFragment;
+
+    private MapView mMapView;
+
+    private BaiduMap mBaiduMap;
+
+    private SDKReceiver mReceiver;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,18 +102,54 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
         mTitle = getTitle();
         // 设置抽屉
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-        fragments = new ArrayList<Fragment>();
+        fragments = new ArrayList<>();
         fragments.add(HomeFragment.newInstance("首页"));
-        MapStatus ms = new MapStatus.Builder().overlook(-20).zoom(15).build();
-        BaiduMapOptions bo = new BaiduMapOptions().mapStatus(ms)
-                .compassEnabled(false).zoomControlsEnabled(false);
-        fragments.add(ExploreFragment.newInstance("发现", bo));
+        //百度LBS
+        LatLng GEO_GUANGZHOU = new LatLng(23.155, 113.264);
+        Point point = new Point();
+        MapStatus ms = new MapStatus
+                .Builder()
+                .overlook(-20)
+                .zoom(15)
+                .target(GEO_GUANGZHOU)
+                .targetScreen(point)
+                .rotate(1f)
+                .build();
+        BaiduMapOptions bo = new BaiduMapOptions()
+                .mapStatus(ms)
+                .mapType(BaiduMap.MAP_TYPE_SATELLITE)
+                .compassEnabled(true)
+                .scaleControlEnabled(true)
+                .zoomControlsEnabled(true)
+                .zoomGesturesEnabled(true);
+        supportMapFragment = SupportMapFragment.newInstance(bo);
+        Bundle args = new Bundle();
+        args.putString(ARG_SECTION_TITLE, "发现");
+        supportMapFragment.setArguments(args);
+        fragments.add(supportMapFragment);
+//        fragments.add(ExploreFragment.newInstance("发现", bo));
         fragments.add(FollowFragment.newInstance("关注"));
         fragments.add(CollectFragment.newInstance("收藏"));
         fragments.add(DraftFragment.newInstance("草稿"));
         fragments.add(SearchFragment.newInstance("搜索"));
         fragments.add(QuestionFragment.newInstance("提问"));
         fragments.add(SettingFragment.newInstance("设置"));
+
+        IntentFilter iFilter = new IntentFilter();
+        iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR);
+        iFilter.addAction(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR);
+        mReceiver = new SDKReceiver();
+        registerReceiver(mReceiver, iFilter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMapView = supportMapFragment.getMapView();
+        mBaiduMap = supportMapFragment.getBaiduMap();
+//        mBaiduMap = mMapView.getMap();
+//        //开启交通图
+//        mBaiduMap.setBaiduHeatMapEnabled(true);
     }
 
     @Override
@@ -136,34 +195,15 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
         actionBar.setTitle(mTitle);
     }
 
-    /**
-     * 内容fragment
-     */
-    public static class ContentFragment extends Fragment {
 
-        private static final String ARG_SECTION_TITLE = "section_title";
-
-        /**
-         * 返回根据title参数创建的fragment
-         */
-        public static ContentFragment newInstance(String title) {
-            ContentFragment fragment = new ContentFragment();
-            Bundle args = new Bundle();
-            args.putString(ARG_SECTION_TITLE, title);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public ContentFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getArguments().getString(ARG_SECTION_TITLE));
-            return rootView;
+    public class SDKReceiver extends BroadcastReceiver {
+        public void onReceive(Context context, Intent intent) {
+            String s = intent.getAction();
+            if (s.equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR)) {
+                showToast("key 验证出错! 请在 AndroidManifest.xml 文件中检查 key 设置");
+            } else if (s.equals(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR)) {
+                showToast("网络出错");
+            }
         }
     }
 }
