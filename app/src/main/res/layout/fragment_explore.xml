@@ -1,13 +1,89 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/layout_width_match"
     tools:context="org.moziqi.generic.company.fragment.ExploreFragment">
 
     <com.baidu.mapapi.map.MapView
         android:id="@+id/mv_map"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:clickable="true" />
+
+    <com.gc.materialdesign.views.ButtonFlat
+        android:id="@+id/btn_map_type"
+        style="@style/layout_wrap"
+        android:layout_alignParentRight="true"
+        android:background="@color/red"
+        android:text="普通地图" />
+
+    <com.gc.materialdesign.views.ButtonFlat
+        android:id="@+id/btn_poi"
+        style="@style/layout_wrap"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/btn_map_type"
+        android:background="@color/red"
+        android:text="POI检索" />
+
+    <com.gc.materialdesign.views.ButtonFlat
+        android:id="@+id/btn_bus"
+        style="@style/layout_wrap"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/btn_poi"
+        android:background="@color/red"
+        android:text="公交" />
+
+    <RelativeLayout
+        android:id="@+id/rl_traffic"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/btn_bus">
+
+        <com.gc.materialdesign.views.CheckBox
+            android:id="@+id/cb_traffic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            materialdesign:check="false" />
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/cb_traffic"
+            android:text="实时交通"
+            android:textColor="@color/red"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_heat_map"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/rl_traffic">
+
+        <com.gc.materialdesign.views.CheckBox
+            android:id="@+id/cb_heat_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            materialdesign:check="false" />
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/cb_heat_map"
+            android:text="城市热力"
+            android:textColor="@color/red"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
 </RelativeLayout>
 

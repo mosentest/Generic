@@ -64,10 +64,6 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 
     private SupportMapFragment supportMapFragment;
 
-    private MapView mMapView;
-
-    private BaiduMap mBaiduMap;
-
     private SDKReceiver mReceiver;
 
 
@@ -105,7 +101,7 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
         fragments = new ArrayList<>();
         fragments.add(HomeFragment.newInstance("首页"));
         //百度LBS
-        LatLng GEO_GUANGZHOU = new LatLng(23.155, 113.264);
+/*        LatLng GEO_GUANGZHOU = new LatLng(23.155, 113.264);
         Point point = new Point();
         MapStatus ms = new MapStatus
                 .Builder()
@@ -126,8 +122,8 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
         Bundle args = new Bundle();
         args.putString(ARG_SECTION_TITLE, "发现");
         supportMapFragment.setArguments(args);
-        fragments.add(supportMapFragment);
-//        fragments.add(ExploreFragment.newInstance("发现", bo));
+        fragments.add(supportMapFragment);*/
+        fragments.add(ExploreFragment.newInstance("发现"));
         fragments.add(FollowFragment.newInstance("关注"));
         fragments.add(CollectFragment.newInstance("收藏"));
         fragments.add(DraftFragment.newInstance("草稿"));
@@ -145,11 +141,6 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
     @Override
     protected void onResume() {
         super.onResume();
-        mMapView = supportMapFragment.getMapView();
-        mBaiduMap = supportMapFragment.getBaiduMap();
-//        mBaiduMap = mMapView.getMap();
-//        //开启交通图
-//        mBaiduMap.setBaiduHeatMapEnabled(true);
     }
 
     @Override
